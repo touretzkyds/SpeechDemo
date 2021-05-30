@@ -1,0 +1,7 @@
+This software is in the public domain.  You may freely copy, modify,
+and redistribute it.  The original authors were Dave Touretzky and
+Sarah Pam.
+
+The software relies on the annyang JavaScript speech recognition
+package.  See http://www.annyangjs.com/ for licensing information for
+annyang.

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Speech Recognition Demo</title>
+    <script src="annyang.min.js"></script>
+    <script src="speechdemo.js"></script>
+    <link rel="stylesheet" href="speechdemo.css">
+</head>
+<body onload='onBodyLoad()'>
+<center>
+   <h1>Speech Recognition Demo</h1>
+   <h3>Speak into your microphone; see the results below.</h3>
+Click <a href="https://github.com/touretzkyds/ai4k12/wiki/Demo%3A-Speech-Recognition-in-Chrome" target="_new">here</a> for experiments to try.<p/>
+</center>
+
+<div style='text-align:center; width:100%'>
+    <div id='mainDiv'><div id='emptyMessageDiv'>Empty</div></div><br />
+    <div id='onDiv' style='display:none;'>MIC ON</div>
+    <div id='offDiv' style='display:none;'>MIC OFF</div><br />
+    <div id='errorsDiv' style='display:none;'></div>
+</div>
+</body>
+</html>
+

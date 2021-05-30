@@ -1,0 +1,84 @@
+#mainDiv
+{
+    border: 2px solid cornflowerblue;
+    background-color: aliceblue;
+    display: inline-block;
+    padding: 10px 10px 16px 10px;
+    margin: 5px;
+    border-radius: 16px;
+}
+
+#onDiv
+{
+    border: none;
+    background-color: green;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px 9px 5px 9px;
+    border-radius: 10px;
+    color: white;
+}
+
+#offDiv
+{
+    border: none;
+    background-color: red;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px 9px 5px 9px;
+    border-radius: 10px;
+    color: white;
+}
+
+#errorsDiv
+{
+    border: 1px solid lightcoral;
+    background-color: white;
+    display: inline-block;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 7px;
+}
+
+#emptyMessageDiv
+{
+    float: left;
+    border: 1px dotted gray;
+    background-color: ghostwhite;
+    color: gray;
+    display: inline-block;
+    padding: 5px 9px 5px 9px;
+    border-radius: 10px;
+}
+
+div.phrases
+{
+    float: left;
+    border: 1px dashed cadetblue;
+    display: inline-block;
+    margin: 4px;
+    padding: 4px 8px 4px 8px;
+    border-radius: 10px;
+}
+
+div.phrase
+{
+    border: 1px solid white;
+    background-color: palegreen;
+    display: block;
+    margin: 2px 0px 2px 0px;
+    padding: 1px 10px 1px 10px;
+    border-radius: 7px;
+}
+
+div.error
+{
+    border: none;
+    background-color: yellow;
+    color: red;
+    display: block;
+    margin: 4px;
+    padding: 4px 8px 4px 8px;
+    border-radius: 5px;
+}
+
