@@ -1,3 +1,9 @@
+@keyframes readBackAnimation {
+    0%   {background-color: #87cefa;}
+    50%  {background-color: #3333ff;}
+    100% {background-color: #87cefa;}
+}
+
 #mainDiv
 {
     border: 2px solid cornflowerblue;
@@ -6,6 +12,48 @@
     padding: 10px 10px 16px 10px;
     margin: 5px;
     border-radius: 16px;
+}
+
+#settingsDiv
+{
+    border: none;
+    background-color: #f4f0e4;
+    display: inline-block;
+    margin: 5px 20px 5px 20px;
+    padding: 2px;
+    border-radius: 10px;
+}
+
+#languageSelect
+{
+    color: black;
+    background-color: white;
+    margin: 5px 9px 5px 9px;
+    padding: 2px 5px 2px 5px;
+    border: 1px solid gray;
+    border-radius: 7px;
+}
+
+#recognitionButton
+{
+    width: content-box;
+    min-width:70px;
+    margin: 5px 25px 5px 5px;
+    padding: 2px 5px 2px 5px;
+    border: 1px solid #bbbbbb;
+    border-radius: 7px;
+    background-color: #f9f9f9;
+}
+
+#readBackButton
+{
+    width: content-box;
+    color: green;
+    background-color: white;
+    margin: 5px 5px 5px 25px;
+    padding: 2px 5px 2px 5px;
+    border: 1px solid brown;
+    border-radius: 7px;
 }
 
 #onDiv
@@ -28,6 +76,21 @@
     padding: 5px 9px 5px 9px;
     border-radius: 10px;
     color: white;
+}
+
+#readBackDiv
+{
+    display: inline-block;
+    width: fit-content;
+    margin: 2px;
+    padding: 10px;
+    border: 2px dotted #3333ff;
+    border-radius: 10px;
+    color: white;
+    background-color: #87cefa;
+    animation-name: readBackAnimation;
+    animation-duration: 2s;
+    animation-iteration-count: 10;
 }
 
 #errorsDiv
@@ -82,3 +145,10 @@ div.error
     border-radius: 5px;
 }
 
+span.readBack
+{
+    border: 1px dotted white;
+    margin: 5px;
+    padding: 2px;
+    border-radius: 3px;
+}

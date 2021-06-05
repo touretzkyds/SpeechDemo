@@ -1,18 +1,41 @@
 'use strict';
 
 var itemsList = [];
+var currentLanguage = -1;
+var languages = [{name:'English', code:'en-US'},
+                 {name:'Spanish (US)', code:'es-US'},
+                 {name:'Spanish (Spain)', code:'es-ES'}];
+var allowSpeechRecognition = false;
+var enableSpeechRecognition = false;
+var allowReadBack = false;
 
 function onBodyLoad() {
+    /*
   if (location.protocol !== 'https:') {
     let href = location.href.replace('http:', 'https:');
     console.log('redirect to:', href);
     location.replace(href);
     return;
   }
+  */
 
+  initLanguages();
   if (annyang) {
     annyang.addCallback('error', function (err) {
-      console.error('There was an error:', err);
+      if (err.error == 'no-speech') {
+        if (!allowSpeechRecognition) {
+          return;
+        }
+        console.log(err);
+      } else if (err.error == 'aborted') {
+        if (!allowSpeechRecognition) {
+          return;
+        }
+        console.warn(err);
+        return;
+      } else {
+        console.error('There was an error:', err);
+      }
       addError('Error: ' + err.error, 200);
     });
 
@@ -33,13 +56,16 @@ function onBodyLoad() {
         'Sorry: this demo is only supported in Google Chrome.';
     addError(errorMessage, 2000);
   }
-
+  changeLanguage();
+  enableSpeechRecognition = true;
+  allowReadBack = true;
+  switchSpeechRecognition();
+  switchReadBack();
   setInterval(intervalFunc, 30);
 }
 
 function notConnected() {
 }
-
 
 function intervalFunc() {
   let emptyMain = true;
@@ -47,6 +73,12 @@ function intervalFunc() {
   for (let k=0; k<itemsList.length; k++) {
     let item = itemsList[k];
     if (!item.valid) { continue; }
+    if (!allowSpeechRecognition) {
+      if (item.type == 'phrases') {
+        emptyMain = false;
+        continue;
+      }
+    }
     item.counter++;
     let element = item.element;
     let counter = item.counter;
@@ -98,6 +130,11 @@ function intervalFunc() {
 }
 
 function addPhrases(phrases) {
+  console.log('addPhrases:', phrases);
+  if (!allowSpeechRecognition) {
+    console.error('addPhrases called when allowSpeechRecognition is false');
+    return;
+  }
   let mainDiv = document.getElementById('mainDiv');
   let phrasesDiv = document.createElement('div');
   phrasesDiv.className = 'phrases';
@@ -124,6 +161,9 @@ function addPhrases(phrases) {
     item.parent = phrasesDiv;
     itemsList.push(item);
   }
+  if (phrases.length > 0) {
+    textToSpeech(phrases[0]);
+  }
 }
 
 function addError(message, timeout) {
@@ -140,3 +180,124 @@ function addError(message, timeout) {
   item.parent = errorsDiv;
   itemsList.push(item);
 }
+
+function initLanguages() {
+  currentLanguage = 0;
+  let languageSelect = document.getElementById('languageSelect');
+  for (let k = 0; k < languages.length; k++) {
+    let language = languages[k];
+    let option = document.createElement('option');
+    option.innerHTML = language.name;
+    option.value = language.code;
+    languageSelect.appendChild(option);
+  }
+  languageSelect.selectedIndex = currentLanguage;
+}
+
+function changeLanguage() {
+  let languageSelect = document.getElementById('languageSelect');
+  currentLanguage = languageSelect.selectedIndex;
+  let language = languages[currentLanguage];
+  enableAnnyang(false);
+  annyang.setLanguage(language.code);
+  enableAnnyang(true);
+  console.log('changeLanguage:', currentLanguage, language.name, language.code);
+}
+
+function switchSpeechRecognition() {
+  allowSpeechRecognition = !allowSpeechRecognition;
+  resetOnOffDivs();
+  let recognitionButton = document.getElementById('recognitionButton');
+  recognitionButton.value = allowSpeechRecognition ? 'pause' : 'resume';
+  recognitionButton.style.color = allowSpeechRecognition ? 'black' : 'red';
+  recognitionButton.style.backgroundColor = allowSpeechRecognition ? '' : '#ffcccc';
+  recognitionButton.style.borderColor = allowSpeechRecognition ? '' : '#ffbbbb';
+}
+
+function switchReadBack() {
+  allowReadBack = !allowReadBack;
+  let readBackButton = document.getElementById('readBackButton');
+  readBackButton.style.color = allowReadBack ? '#009900' : '#aaaaaa';
+  readBackButton.style.backgroundColor = allowReadBack ? '#aaffaa' : '#dddddd';
+  readBackButton.style.borderColor = allowReadBack ? '#99ff99' : '#dddddd';
+}
+
+function textToSpeech(phrase) {
+  if (!allowReadBack) { return; }
+  console.log('textToSpeech', phrase);
+  if ('speechSynthesis' in window) {
+  } else {
+    addError('no support for text to speech', 1000);
+    return;
+  }
+  var message = new SpeechSynthesisUtterance();
+  let language = languages[currentLanguage];
+  message.text = phrase;
+  message.lang = language.code;
+  message.onstart = function(event) { onSpeakStart(event); }
+  message.onend = function(event) { onSpeakEnd(); }
+  message.onerror = function(event) { onSpeakError(event); }
+  resumeSpeechRecognition(false);
+  setTimeout(onSpeakEnd, 20000); //force enable after 20 seconds
+  showReadBackBox('reading back: <span class="readBack">' + phrase + '</span>');
+  window.speechSynthesis.speak(message);
+}
+
+function onSpeakStart(event) {
+  console.log('onSpeakStart', event.utterance.text);
+  let phrase = event.utterance.text;
+  showReadBackBox('reading back: <span class="readBack">' + phrase + '</span>');
+  resumeSpeechRecognition(false);
+}
+
+function onSpeakEnd() {
+  console.log('onSpeakEnd');
+  //showReadBackBox('');
+  //resumeSpeechRecognition(true);
+  setTimeout(function(){ showReadBackBox(''); resumeSpeechRecognition(true); }, 200);
+}
+
+function onSpeakError(err) {
+  console.error('onSpeakError', err);
+  addError('SpeakError: ' + err.error, 500);
+  onSpeakEnd();
+}
+
+function showReadBackBox(message) {
+  let readBackDiv = document.getElementById('readBackDiv');
+  readBackDiv.innerHTML = message;
+  readBackDiv.style.display = (message != '') ? 'inline-block' : 'none';
+  console.log((message != ''), message);
+}
+
+function resumeSpeechRecognition(enabled) {
+  console.log('resumeSpeechRecognition:', enabled);
+  if (enableSpeechRecognition == enabled) { return; }
+  enableSpeechRecognition = enabled;
+  resetOnOffDivs();
+}
+
+function resetOnOffDivs() {
+  let enable = allowSpeechRecognition && enableSpeechRecognition;
+  let onDiv = document.getElementById('onDiv');
+  let offDiv = document.getElementById('offDiv');
+  onDiv.style.backgroundColor = enable ? 'green' : 'lightgray';
+  offDiv.style.backgroundColor = enable ? 'red' : 'lightgray';
+  console.log('----', enable);
+  if (annyang.isListening() == enable) {
+    //return;
+  }
+  enableAnnyang(enable);
+}
+
+function enableAnnyang(enable) {
+  try {
+    if (enable) {
+      annyang.start({autoRestart: true, continuous: false});
+    } else {
+      annyang.abort();
+    }
+  } catch (err) {
+  }
+}
+

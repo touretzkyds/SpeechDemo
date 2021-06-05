@@ -9,15 +9,21 @@
 </head>
 <body onload='onBodyLoad()'>
 <center>
-   <h1>Speech Recognition Demo</h1>
-   <h3>Speak into your microphone; see the results below.</h3>
-Click <a href="https://github.com/touretzkyds/ai4k12/wiki/Demo%3A-Speech-Recognition-in-Chrome" target="_new">here</a> for experiments to try.<p/>
+    <h1>Speech Recognition Demo</h1>
+    <h3>Speak into your microphone; see the results below.</h3>
+    Click <a href="https://github.com/touretzkyds/ai4k12/wiki/Demo%3A-Speech-Recognition-in-Chrome" target="_new">here</a> for experiments to try.<p/>
 </center>
 
 <div style='text-align:center; width:100%'>
+    <div id='settingsDiv' style='display:block;'>
+        <input id='recognitionButton' type='button' value='pause' onclick='switchSpeechRecognition();' />
+        <select id='languageSelect' onchange='changeLanguage();' ></select>
+        <input id='readBackButton' type='button' value='read back' onclick='switchReadBack();' />
+    </div>
     <div id='mainDiv'><div id='emptyMessageDiv'>Empty</div></div><br />
     <div id='onDiv' style='display:none;'>MIC ON</div>
     <div id='offDiv' style='display:none;'>MIC OFF</div><br />
+    <div id='readBackDiv' style='display:none;'></div><br />
     <div id='errorsDiv' style='display:none;'></div>
 </div>
 </body>
