@@ -19,14 +19,12 @@ var allowReadBack = false;
 var textFontFamily = '';
 
 function onBodyLoad() {
-    /*
   if (location.protocol !== 'https:') {
     let href = location.href.replace('http:', 'https:');
     console.log('redirect to:', href);
     location.replace(href);
     return;
   }
-  */
 
   initLanguages();
   if (annyang) {
