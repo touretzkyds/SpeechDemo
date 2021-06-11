@@ -19,6 +19,15 @@ var allowReadBack = false;
 var textFontFamily = '';
 
 function onBodyLoad() {
+  let canUseBrowser = isChrome();
+  extraChromeCheck();
+  if ( (!('SpeechRecognition' in window)) && (!('webkitSpeechRecognition' in window)) ) {
+    canUseBrowser = false;
+  }
+  if (!canUseBrowser) {
+    alertForChrome();
+  }
+
   if (location.protocol !== 'https:') {
     let href = location.href.replace('http:', 'https:');
     console.log('redirect to:', href);
@@ -343,4 +352,48 @@ function isEmptyString(text) {
   return empty;
 }
 
+function isChrome() {
+  var isChromium = window.chrome;
+  var winNav = window.navigator;
+  var vendorName = winNav.vendor;
+  var isOpera = typeof window.opr !== "undefined";
+  var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+  var isIOSChrome = winNav.userAgent.match("CriOS");
+  var isBrave = (navigator.brave === true);
 
+  if (isIOSChrome) {
+    // is Google Chrome on IOS
+    return false;
+  } else if(
+    isChromium !== null &&
+    typeof isChromium !== "undefined" &&
+    vendorName === "Google Inc." &&
+    isOpera === false &&
+    isIEedge === false &&
+    isBrave === false
+  ) {
+    // is Google Chrome
+    return true;
+  }
+  return false;
+}
+
+async function extraChromeCheck() {
+  let isBrave = false;
+  try {
+    if (navigator.brave) {
+      if (await navigator.brave.isBrave()) {
+        isBrave = true;
+      }
+    }
+  } catch (err) {
+  }
+  if (isBrave) {
+    console.error('extraChromeCheck');
+    alertForChrome();
+  }
+}
+
+function alertForChrome() {
+  alert('Web Speech API is not supported by this browser. Please use Chrome version 25 or later.');
+}
