@@ -5,15 +5,15 @@ var currentLanguage = -1;
 var languages = [
                  {name:'English (US)', code:'en-US'},
                  {name:'English (UK)', code:'en-Gb'},
-                 {name:'Spanish (US)', code:'es-US'},
-                 {name:'Spanish (Spain)', code:'es-ES'},
+                 {name:'Arabic (Saudi Arabia)', code:'ar-SA', readBackCode:'ar-XA',
+           			  css:'arabic.css', cssLinked:false, fontFamily:'Almarai', rightToLeft:true, useCloud:true},
+                 {name:'Chinese (Mandarin)', code:'zh', readBackCode:'zh-CN', 
+           			  css:'chinese.css', cssLinked:false, fontFamily:'zCoolXiaoWei'},
                  {name:'French (France)', code:'fr-FR'},
                  {name:'German (Germany)', code:'de-DE'},
                  {name:'Italian (Italy)', code:'it-IT'},
-                 {name:'Chinese (Mandarin)', code:'zh', readBackCode:'zh-CN', 
-           			  css:'chinese.css', cssLinked:false, fontFamily:'zCoolXiaoWei'},
-                 {name:'Arabic (Saudi Arabia)', code:'ar-SA', readBackCode:'ar-XA',
-           			  css:'arabic.css', cssLinked:false, fontFamily:'Almarai', rightToLeft:true, useCloud:true}
+                 {name:'Spanish (US)', code:'es-US'},
+                 {name:'Spanish (Spain)', code:'es-ES'},
                 ];
 var allowSpeechRecognition = false;
 var enableSpeechRecognition = false;
@@ -259,7 +259,7 @@ function switchSpeechRecognition() {
   allowSpeechRecognition = !allowSpeechRecognition;
   resetOnOffDivs();
   let recognitionButton = document.getElementById('recognitionButton');
-  recognitionButton.value = allowSpeechRecognition ? 'pause' : 'resume';
+  recognitionButton.value = allowSpeechRecognition ? 'pause' : 'paused';
   recognitionButton.style.color = allowSpeechRecognition ? 'black' : 'red';
   recognitionButton.style.backgroundColor = allowSpeechRecognition ? '' : '#ffcccc';
   recognitionButton.style.borderColor = allowSpeechRecognition ? '' : '#ffbbbb';
@@ -268,9 +268,10 @@ function switchSpeechRecognition() {
 function switchReadBack() {
   allowReadBack = !allowReadBack;
   let readBackButton = document.getElementById('readBackButton');
-  readBackButton.value = allowReadBack ? 'silence' : 'read back';
+  readBackButton.value = allowReadBack ? 'readback' : 'silenced';
   readBackButton.style.color = allowReadBack ? '#009900' : '#000000';
   readBackButton.style.backgroundColor = allowReadBack ? '#aaffaa' : '#f9f9f9';
+  readBackButton.style.backgroundColor = allowReadBack ? '#ccffcc' : '#f9f9f9';
   readBackButton.style.borderColor = allowReadBack ? '#99ff99' : '#bbbbbb';
   document.getElementById('forceServerSideTTSDiv').style.visibility = allowReadBack ? '' : 'hidden';
 }
