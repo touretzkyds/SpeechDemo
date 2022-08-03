@@ -15,10 +15,11 @@
 </center>
 
 <div style='text-align:center; width:100%'>
-    <div id='settingsDiv' style='display:block;'>
+    <div id='settingsDiv' style='display:block; padding-left:222px;'>
         <input id='recognitionButton' type='button' value='pause' onclick='switchSpeechRecognition();' />
         <select id='languageSelect' onchange='changeLanguage();' ></select>
         <input id='readBackButton' type='button' value='read back' onclick='switchReadBack();' />
+        <div id='forceServerSideTTSDiv' style='display:inline-block;'><input id='forceServerSideTTSButton' type='checkbox' /><span>force server-side text-to-speech</span></div>
     </div>
     <div id='mainDiv'><div id='emptyMessageDiv'>Empty</div></div><br />
     <div id='onDiv' style='display:none;'>MIC ON</div>

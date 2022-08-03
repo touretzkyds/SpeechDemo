@@ -12,7 +12,7 @@ var languages = [
                  {name:'Italian (Italy)', code:'it-IT'},
                  {name:'Chinese (Mandarin)', code:'zh', readBackCode:'zh-CN', 
            			  css:'chinese.css', cssLinked:false, fontFamily:'zCoolXiaoWei'},
-                 {name:'Arabic (Saudi Arabia)', code:'ar-SA', readBackCode:'ar-SA',
+                 {name:'Arabic (Saudi Arabia)', code:'ar-SA', readBackCode:'ar-XA',
            			  css:'arabic.css', cssLinked:false, fontFamily:'Almarai', rightToLeft:true, useCloud:true}
                 ];
 var allowSpeechRecognition = false;
@@ -31,6 +31,7 @@ function onBodyLoad() {
     alertForChrome();
   }
 
+  //if (location.protocol === 'https:') {
   if (location.protocol !== 'https:') {
     let href = location.href.replace('http:', 'https:');
     console.log('redirect to:', href);
@@ -271,6 +272,7 @@ function switchReadBack() {
   readBackButton.style.color = allowReadBack ? '#009900' : '#000000';
   readBackButton.style.backgroundColor = allowReadBack ? '#aaffaa' : '#f9f9f9';
   readBackButton.style.borderColor = allowReadBack ? '#99ff99' : '#bbbbbb';
+  document.getElementById('forceServerSideTTSDiv').style.visibility = allowReadBack ? '' : 'hidden';
 }
 
 function textToSpeech(phrase) {
@@ -283,7 +285,7 @@ function textToSpeech(phrase) {
   } else {
     code = language.code;
   }
-  if (language.useCloud) {
+  if (language.useCloud || document.getElementById('forceServerSideTTSButton').checked) {
     cloudTextToSpeech(phrase, code, 'FEMALE');
     return;
   }
@@ -423,7 +425,7 @@ function alertForChrome() {
 }
 
 function cloudTextToSpeech(phrase, langCode, gender) {
-  //let cloudAPIKey = 'AIzaSyBfeZeLbYvF6BN9n_OluPA2csv6TKgjIHs';
+  //let cloudAPIKey = 'AIzaSyBkgDOjb0TGtXADPm6IZj6hgUubrnoDpmc';
   let cloudAPIKey = 'AIzaSyDlOdbBlgn5AwgR7Tc1BBbJuqNR2usdmCU';
   let url = 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' + cloudAPIKey;
   let data = {
