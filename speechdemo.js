@@ -426,7 +426,6 @@ function alertForChrome() {
 }
 
 function cloudTextToSpeech(phrase, langCode, gender) {
-  //let cloudAPIKey = 'AIzaSyBkgDOjb0TGtXADPm6IZj6hgUubrnoDpmc';
   let cloudAPIKey = 'AIzaSyDlOdbBlgn5AwgR7Tc1BBbJuqNR2usdmCU';
   let url = 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' + cloudAPIKey;
   let data = {
